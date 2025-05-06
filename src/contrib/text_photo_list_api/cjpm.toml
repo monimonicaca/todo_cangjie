@@ -1,8 +1,18 @@
 [dependencies]
+ 
+  tea = { git = "https://gitcode.com/yishengTH/tea.git", branch = "cj-0.53.13" }
+  naiveteaset = { git = "https://gitcode.com/zhangyin_gitcode/naiveteaset.git", branch = "master" }
+  naiveioc = { git = "https://gitcode.com/zhangyin_gitcode/naiveioc.git", branch = "master" }
+  naivemediator = { git = "https://gitcode.com/zhangyin_gitcode/naivemediator.git", branch = "master" }
+  naivevalidation = { git = "https://gitcode.com/zhangyin_gitcode/naivevalidation.git", branch = "master" }
+  naivesqlbuilder = { git = "https://gitcode.com/zhangyin_gitcode/naivesqlbuilder.git", branch = "5313" }
+  sql_builder = { git = "https://gitcode.com/zhangyin_gitcode/sql_builder.git", branch = "5313" }
+  mysqlclient4cj = { git = "https://gitcode.com/zhangyin_gitcode/mysql-driver.git", branch = "for-cj-0.53.13" }
+  cjjson = { git = "https://gitcode.com/Cangjie-TPC/cangjieJSON.git", output-type = "static" }
 
 [package]
   cjc-version = "0.53.18"
-  compile-option = ""
+  compile-option = "--debug-macro"
   description = "nothing here"
   link-option = ""
   name = "text_photo_list_api"

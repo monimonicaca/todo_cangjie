@@ -1,0 +1,41 @@
+
+name: todo-cangjie
+
+services:
+  todoCj-sqldata:
+    image: "swr.cn-north-4.myhuaweicloud.com/swr-devadv/mysql:8.0"
+    environment:
+      - MYSQL_ROOT_PASSWORD=Pass@word
+    volumes:
+      - todoCj-sqldata:/var/lib/mysql
+      - ./src/contrib/text_photo_list_api/db/010_create_todolistdb.sql:/docker-entrypoint-initdb.d/010_create_todolistdb.sql
+    networks:
+      - todolist-cangjie-network
+    ports:
+      - "35206:3306"
+  todo-textphotolistapi:
+    image: todo-textphotolistapi
+    build:
+      context: .
+      dockerfile: src/contrib/text_photo_list_api/Dockerfile
+    networks:
+      - todolist-cangjie-network
+    ports:
+      - "35210:8080"
+      - "50001"
+networks:
+  todolist-cangjie-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.16.0/24
+
+
+volumes:
+  todoCj-sqldata:
+    external: false
+  recall-rabbitmq-data:
+    external: false
+  recall-rabbitmq-log:
+    external: false
