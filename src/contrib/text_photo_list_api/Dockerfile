@@ -9,6 +9,7 @@ ENV LD_LIBRARY_PATH="/root/cangjie/runtime/lib/linux_x86_64_llvm:/root/cangjie/t
 COPY . .
 WORKDIR src/contrib/text_photo_list_api/
 RUN cjpm update
+RUN cjpm clean
 RUN cjpm build
 
 ENTRYPOINT ["/app/src/contrib/text_photo_list_api/target/release/bin/main"]

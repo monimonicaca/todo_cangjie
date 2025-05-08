@@ -13,6 +13,8 @@ services:
       - todolist-cangjie-network
     ports:
       - "35206:3306"
+
+
   todo-textphotolistapi:
     image: todo-textphotolistapi
     build:
@@ -23,6 +25,24 @@ services:
     ports:
       - "35210:8080"
       - "50001"
+
+
+  todo-textphotolistapi-dapr:
+    image: "swr.cn-north-4.myhuaweicloud.com/swr-devadv/dapr:1.14.4"
+    network_mode: "service:todo-textphotolistapi"
+    depends_on:
+      - todo-textphotolistapi
+    command: [ "./daprd",
+               "-app-id", "todo-textphotolistapi",
+               "-app-port", "8080",
+               "-components-path", "/components",
+               "-config", "/configuration/todo-configuration.yaml" ]
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
+    restart: always
+
+
 networks:
   todolist-cangjie-network:
     driver: bridge
@@ -35,7 +55,7 @@ networks:
 volumes:
   todoCj-sqldata:
     external: false
-  recall-rabbitmq-data:
+  todoCj-rabbitmq-data:
     external: false
-  recall-rabbitmq-log:
+  todoCj-rabbitmq-log:
     external: false
