@@ -21,7 +21,6 @@ public class DatabaseConnectionProvider <: IDatabaseConnectionProvider {
         datasource = driver.open(connectionString, [("database", "todoListDb"), ("prepare.mode", "server")])
     }
     public func getConnection(): Connection {
-       return datasource.connect()
-        throw Exception("not implemented")
+        return datasource.connect()
     }
 }

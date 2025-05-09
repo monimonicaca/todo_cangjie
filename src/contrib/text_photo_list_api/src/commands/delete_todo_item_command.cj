@@ -13,6 +13,23 @@ import naiveserviceresult.*
 
 @NMIRequest[@ sourcePackage(), ServiceResult]
 @JsonAdapter
-public class DeleteTodoItemCommand {
+public class DeleteTodoItemCommand <: Hashable & Equatable<DeleteTodoItemCommand> {
     public var id: Int64 = 0
+    public func hashCode(): Int64 {
+        return id.hashCode();
+    }
+    public operator func !=(rhs: DeleteTodoItemCommand): Bool {
+        if (rhs.id.hashCode() != hashCode()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public operator func ==(rhs: DeleteTodoItemCommand): Bool {
+        if (rhs.id.hashCode() != hashCode()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

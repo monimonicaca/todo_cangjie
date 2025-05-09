@@ -43,6 +43,15 @@ services:
     restart: always
 
 
+  todo-seq:
+    image: "swr.cn-north-4.myhuaweicloud.com/swr-devadv/seq:latest"
+    environment:
+      - ACCEPT_EULA=Y
+    networks:
+      - todolist-cangjie-network
+    ports:
+      - "35340:80"
+
 networks:
   todolist-cangjie-network:
     driver: bridge

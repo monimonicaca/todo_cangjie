@@ -15,11 +15,16 @@ import naiveteaset.*
 //通用的返回值
 import naiveserviceresult.*
 
+//引用标准日志空间
+import log.*
+
 public func addHandler(context: TeaContext): Unit {
     //将http请求转为CreateToDoItemCommand实例
     let command = context.bindJson<CreateToDoItemCommand>()
     /* let storage=@NIGetRequiredService[context.serviceProvider](IToDoItemStorage)
     let key=storage.add(command.title,command.content) */
+    let logger = @NIGetRequiredService[context.serviceProvider](Logger)
+    logger.info("----- Handling ${CreateToDoItemCommand.__naivemediator__qualifiedName}")
     //从依赖注入容器中取出中介者模式
     let mediator = @NIGetRequiredService[context.serviceProvider](NaiveMediator)
     //让中介者转发command
@@ -29,6 +34,9 @@ public func addHandler(context: TeaContext): Unit {
 
 public func deleteItemHandler(context: TeaContext): Unit {
     let command = context.bindJson<DeleteTodoItemCommand>()
+    let logger = @NIGetRequiredService[context.serviceProvider](Logger)
+    logger.info("----- Handling ${DeleteTodoItemCommand.__naivemediator__qualifiedName}")
+    
     let mediator = @NIGetRequiredService[context.serviceProvider](NaiveMediator)
     //让中介者转发command
     let result = mediator.send(command)

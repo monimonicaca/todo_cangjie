@@ -12,6 +12,8 @@
   dapr_cangjie_sdk = { git = "https://gitcode.com/PermissionDog/dapr-cangjie-sdk.git", branch = "cj_0.53.13" }
   dapr_tea = { git = "https://gitcode.com/PermissionDog/dapr_tea.git", branch = "cj-0.53.13" }
   naiveserviceresult = { git = "https://gitcode.com/zhangyin_gitcode/naiveserviceresult.git" }
+  naivelogger = { git = "https://gitcode.com/zhangyin_gitcode/naivelogger.git", branch = "master" }
+  naivelogger_seq = { git = "https://gitcode.com/zhangyin_gitcode/naivelogger_seq.git", branch = "master" }
   
 [package]
   cjc-version = "0.53.18"

@@ -10,7 +10,7 @@ import naiveteaset.dapr_cangjie_sdk.*
 main(): Int64 {
     let tea = Tea.default()
     tea.useNaiveIoc {
-        services => services |> useDaprClient |> addCustomApplicationServices |> addCustomMediator
+        services => services |> useDaprClient |> addCustomLogger |> addCustomApplicationServices |> addCustomMediator
     }
 
     tea |> mapHandlers

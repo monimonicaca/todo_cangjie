@@ -18,7 +18,8 @@ import naiveserviceresult.*
 
 @NIService
 public class ToDoItemStorage <: IToDoItemStorage {
-    public ToDoItemStorage(private let connectionProvider: IDatabaseConnectionProvider) {}
+    public ToDoItemStorage(private let connectionProvider: IDatabaseConnectionProvider,
+        private let identityService: IIdentityService) {}
     public func toString(): String {
         return "IToDoItemStorage"
     }
@@ -26,7 +27,7 @@ public class ToDoItemStorage <: IToDoItemStorage {
         let (sql, params) = @NSUpdate(ToDoItem) {p => [p.isDeleted << true]}
             .setWhere {p => p.id == id}
             .and {
-                p => p.userIdentityGuid == ""
+                p => p.userIdentityGuid == identityService.getUserIdentityGuid()
             }
             .and {p => p.isDeleted == false}
             .toSQLWithParams()
@@ -42,7 +43,7 @@ public class ToDoItemStorage <: IToDoItemStorage {
 
     public func add(title: String, content: String): TypedServiceResult<String> {
         let (sql, params) = @NSInsertInto(ToDoItem) {
-            p => [p.title << title, p.content << content, p.userIdentityGuid << ""]
+            p => [p.title << title, p.content << content, p.userIdentityGuid << identityService.getUserIdentityGuid()]
         }.toSQLWithParams()
         print(sql)
 
