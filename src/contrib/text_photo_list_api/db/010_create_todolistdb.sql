@@ -7,8 +7,6 @@ CREATE TABLE  todoItem (
     todoItemId BIGINT NULL DEFAULT NULL,
     title TEXT  NULL,     
     content TEXT NOT NULL,                  
-    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  
     userIdentityGuid VARCHAR(255) NOT NULL,
     isCompleted TINYINT(1) NOT NULL DEFAULT 0,
     isDeleted TINYINT(1) NOT NULL DEFAULT 0,

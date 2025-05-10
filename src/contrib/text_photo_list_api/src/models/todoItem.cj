@@ -16,10 +16,6 @@ public class ToDoItem {
     @NSColumn
     public var content: String = ""
     @NSColumn
-    public var createdAt: Int64 = 0;
-    @NSColumn
-    public var updatedAt: Int64 = 0;
-    @NSColumn
     public var userIdentityGuid: String = ""
     @NSColumn
     public var isCompleted: Bool = false;

@@ -25,6 +25,9 @@ import naivelogger_seq.*
 func mapHandlers(tea: Tea): Tea {
     tea.post("add", addHandler)
     tea.post("delete", deleteItemHandler)
+    tea.post("update/content",updateItemContentHandler)
+    tea.post("update/title",updateItemTitleHandler)
+    tea.post("finish",finishItemHandler)
     return tea
 }
 
@@ -40,11 +43,19 @@ func addCustomApplicationServices(serviceCollection: INaiveServiceCollection): I
 func addCustomMediator(serviceCollection: INaiveServiceCollection): INaiveServiceCollection {
     @NIAddTransient[serviceCollection](NaiveMediator)
     //注册流水线
-    @NIAddTransient[serviceCollection](IPipelineBehavior, ValidatorBehavior)
+    //@NIAddTransient[serviceCollection](IPipelineBehavior, ValidatorBehavior)
 
     @NMRegisterTransientHandler[serviceCollection](CreateToDoItemCommand,CreateToDoItemCommandHandler)
+
     @NMRegisterTransientHandler[serviceCollection](DeleteTodoItemCommand,DeleteToDoItemCommandHandler)
-    @NVRegisterTransientValidator[serviceCollection](DeleteTodoItemCommand,DeleteToDoCommandValidator)
+   // @NVRegisterTransientValidator[serviceCollection](DeleteTodoItemCommand,DeleteToDoCommandValidator)
+
+    @NMRegisterTransientHandler[serviceCollection](UpdateTodoItemContentCommand,UpdateTodoItemContentCommandHandler)
+    //@NVRegisterTransientValidator[serviceCollection](UpdateTodoItemContentCommand,UpdateTodoItemCommandValidator)
+
+    @NMRegisterTransientHandler[serviceCollection](FinishToDoItemCommand,FinishToDoItemCommandHandler)
+    
+    @NMRegisterTransientHandler[serviceCollection](UpdateTodoItemTitleCommand,UpdateTodoItemTitleCommandHandler)
     return serviceCollection
 }
 //注册日志

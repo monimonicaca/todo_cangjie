@@ -36,13 +36,42 @@ public func deleteItemHandler(context: TeaContext): Unit {
     let command = context.bindJson<DeleteTodoItemCommand>()
     let logger = @NIGetRequiredService[context.serviceProvider](Logger)
     logger.info("----- Handling ${DeleteTodoItemCommand.__naivemediator__qualifiedName}")
-    
+    logger.info("----- request data ${command.id}")
     let mediator = @NIGetRequiredService[context.serviceProvider](NaiveMediator)
     //让中介者转发command
     let result = mediator.send(command)
     context.json(200, result.toViewModel())
 }
-
+public func updateItemContentHandler(context: TeaContext): Unit {
+    let command = context.bindJson<UpdateTodoItemContentCommand>()
+    let logger = @NIGetRequiredService[context.serviceProvider](Logger)
+    logger.info("----- Handling ${UpdateTodoItemContentCommand.__naivemediator__qualifiedName}")
+    logger.info("----- request data ${command.id} ")
+    let mediator = @NIGetRequiredService[context.serviceProvider](NaiveMediator)
+    //让中介者转发command
+    let result = mediator.send(command)
+    context.json(200, result.toViewModel())
+}
+public func updateItemTitleHandler(context: TeaContext): Unit {
+    let command = context.bindJson<UpdateTodoItemTitleCommand>()
+    let logger = @NIGetRequiredService[context.serviceProvider](Logger)
+    logger.info("----- Handling ${UpdateTodoItemTitleCommand.__naivemediator__qualifiedName}")
+    logger.info("----- request data ${command.id} ")
+    let mediator = @NIGetRequiredService[context.serviceProvider](NaiveMediator)
+    //让中介者转发command
+    let result = mediator.send(command)
+    context.json(200, result.toTypedViewModel())
+}
+public func finishItemHandler(context: TeaContext): Unit {
+    let command = context.bindJson<FinishToDoItemCommand>()
+    let logger = @NIGetRequiredService[context.serviceProvider](Logger)
+    logger.info("----- Handling ${FinishToDoItemCommand.__naivemediator__qualifiedName}")
+    logger.info("----- request data ${command.id} ")
+    let mediator = @NIGetRequiredService[context.serviceProvider](NaiveMediator)
+    //让中介者转发command
+    let result = mediator.send(command)
+    context.json(200, result.toViewModel())
+}
 public func checkServiceHandler(context: TeaContext): Unit {
     let storage = @NIGetRequiredService[context.serviceProvider](IToDoItemStorage)
     context.string(200, storage.toString())

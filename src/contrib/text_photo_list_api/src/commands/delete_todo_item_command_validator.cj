@@ -41,9 +41,8 @@ public class DeleteToDoCommandValidator <: AbstractValidator<DeleteTodoItemComma
                     let queryResult = statement.query(params)
                     return !(@NSMapTo[ToDoItem](queryResult) |> isEmpty)
                 }
-
                 throw Exception("this should not happen")
             }
-            .withMessage("TextItem not found")
+            .withMessage("ToDoItem not found")
     }
 }

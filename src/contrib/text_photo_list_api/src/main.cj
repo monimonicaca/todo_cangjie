@@ -9,6 +9,9 @@ import naiveteaset.dapr_cangjie_sdk.*
 
 main(): Int64 {
     let tea = Tea.default()
+    //使用全局拦截器
+    tea.use(globalExceptionHandler)
+    //useNaiveIoc也是一个拦截器
     tea.useNaiveIoc {
         services => services |> useDaprClient |> addCustomLogger |> addCustomApplicationServices |> addCustomMediator
     }

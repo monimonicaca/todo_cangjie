@@ -1,7 +1,5 @@
 package text_photo_list_api.commands
 
-import serialization.serialization.*
-
 //json和这个类互相映射
 import cjjson.*
 import cjjson.macros.*
@@ -13,19 +11,20 @@ import naiveserviceresult.*
 
 @NMIRequest[@ sourcePackage(), ServiceResult]
 @JsonAdapter
-public class DeleteTodoItemCommand  <: Hashable & Equatable<DeleteTodoItemCommand>{
+public class UpdateTodoItemContentCommand <: Hashable & Equatable<UpdateTodoItemContentCommand> {
     public var id: Int64 = 0
+    public var content: String = ""
     public func hashCode(): Int64 {
         return id;
     }
-    public operator func !=(rhs: DeleteTodoItemCommand): Bool {
+    public operator func !=(rhs: UpdateTodoItemContentCommand): Bool {
         if (rhs.id != hashCode()) {
             return true;
         } else {
             return false;
         }
     }
-    public operator func ==(rhs: DeleteTodoItemCommand): Bool {
+    public operator func ==(rhs: UpdateTodoItemContentCommand): Bool {
         if (rhs.id != hashCode()) {
             return false;
         } else {

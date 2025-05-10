@@ -18,8 +18,10 @@ import naiveserviceresult.*
 
 @NIService
 public class ToDoItemStorage <: IToDoItemStorage {
-    public ToDoItemStorage(private let connectionProvider: IDatabaseConnectionProvider,
-        private let identityService: IIdentityService) {}
+    public ToDoItemStorage(
+        private let connectionProvider: IDatabaseConnectionProvider,
+        private let identityService: IIdentityService
+    ) {}
     public func toString(): String {
         return "IToDoItemStorage"
     }
@@ -30,6 +32,24 @@ public class ToDoItemStorage <: IToDoItemStorage {
                 p => p.userIdentityGuid == identityService.getUserIdentityGuid()
             }
             .and {p => p.isDeleted == false}
+            .toSQLWithParams()
+
+        try (connection = connectionProvider.getConnection()) {
+            let statement = connection.prepareStatement(sql)
+            statement.update(params)
+            return ServiceResult.success()
+        }
+
+        throw Exception("this should not happen")
+    }
+    public func finish(id: Int64): ServiceResult {
+        let (sql, params) = @NSUpdate(ToDoItem) {p => [p.isCompleted << true]}
+            .setWhere {p => p.id == id}
+            .and {
+                p => p.userIdentityGuid == identityService.getUserIdentityGuid()
+            }
+            .and {p => p.isDeleted == false}
+            .and{p => p.isCompleted == false}
             .toSQLWithParams()
 
         try (connection = connectionProvider.getConnection()) {
@@ -53,5 +73,39 @@ public class ToDoItemStorage <: IToDoItemStorage {
             return TypedServiceResult<String>.success(updateResult.lastInsertId.toString());
         }
         throw Exception("Not Implemented ")
+    }
+    public func updateContent(id: Int64, content: String): ServiceResult {
+        let (sql, params) = @NSUpdate(ToDoItem) {p => [p.content << content]}
+            .setWhere {p => p.id == id}
+            .and {
+                p => p.userIdentityGuid == identityService.getUserIdentityGuid()
+            }
+            .and {p => p.isDeleted == false}
+            .toSQLWithParams()
+
+        try (connection = connectionProvider.getConnection()) {
+            let statement = connection.prepareStatement(sql)
+            statement.update(params)
+            return ServiceResult.success()
+        }
+
+        throw Exception("this should not happen")
+    }
+     public func updateTitle(id: Int64, title: String): TypedServiceResult<String> {
+        let (sql, params) = @NSUpdate(ToDoItem) {p => [p.title << title]}
+            .setWhere {p => p.id == id}
+            .and {
+                p => p.userIdentityGuid == identityService.getUserIdentityGuid()
+            }
+            .and {p => p.isDeleted == false}
+            .toSQLWithParams()
+
+        try (connection = connectionProvider.getConnection()) {
+            let statement = connection.prepareStatement(sql)
+            let updateResult = statement.update(params)
+            return TypedServiceResult<String>.success(updateResult.lastInsertId.toString());
+        }
+
+        throw Exception("this should not happen")
     }
 }

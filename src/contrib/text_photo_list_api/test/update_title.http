@@ -1,0 +1,6 @@
+POST http://localhost:35210/update/title
+
+{
+    "id":6,
+    "title":"update title"
+}
