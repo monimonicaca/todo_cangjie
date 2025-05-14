@@ -9,6 +9,7 @@ services:
     volumes:
       - todoCj-sqldata:/var/lib/mysql
       - ./src/contrib/text_photo_list_api/db/010_create_todolistdb.sql:/docker-entrypoint-initdb.d/010_create_todolistdb.sql
+      - ./src/core/list/list_api/db/020_create_listdb.sql:/docker-entrypoint-initdb.d/020_create_listdb.sql
     networks:
       - todolist-cangjie-network
     ports:
@@ -42,7 +43,44 @@ services:
       - "./dapr/configuration/:/configuration"
     restart: always
 
+  todo-listapi:
+    image: todo-listapi
+    build:
+      context: .
+      dockerfile: src/core/list/list_api/Dockerfile
+    networks:
+      - todolist-cangjie-network
+    ports:
+      - "35220:8080"
+      - "50001"
 
+
+  todo-listapi-dapr:
+    image: "swr.cn-north-4.myhuaweicloud.com/swr-devadv/dapr:1.14.4"
+    network_mode: "service:todo-listapi"
+    depends_on:
+      - todo-listapi
+    command: [ "./daprd",
+               "-app-id", "todo-listapi",
+               "-app-port", "8080",
+               "-components-path", "/components",
+               "-config", "/configuration/todo-configuration.yaml" ]
+    volumes:
+      - "./dapr/components/:/components"
+      - "./dapr/configuration/:/configuration"
+    restart: always
+
+
+  todo-envoygateway:
+    image: "swr.cn-north-4.myhuaweicloud.com/swr-devadv/envoy:v1.11.1"
+    volumes:
+      - ./infrastructure/envoy.yaml:/etc/envoy/envoy.yaml
+    networks:
+      - todolist-cangjie-network
+    ports:
+      - "35191:80"
+      - "35181:8001"
+      
   todo-seq:
     image: "swr.cn-north-4.myhuaweicloud.com/swr-devadv/seq:latest"
     environment:
