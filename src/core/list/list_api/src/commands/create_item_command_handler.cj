@@ -1,7 +1,8 @@
 package list_api.commands
 
+import list_api.utils.RequestUtil
 import list_domain.aggregate_models.item_aggregate.*
-// import list_api.integration_events.*
+import list_api.integration_events.*
 import list_api.queries.*
 import list_api.services.*
 
@@ -27,18 +28,19 @@ public class CreateItemCommandHandler <: IRequestHandler<CreateItemCommand, Serv
         private let itemRepository: IItemRepository,
         private let listQueryService: IListQueryService,
         private let identityService: IIdentityService,
-        private let listIntegrationEventService: IListIntegrationEventService
+private let listIntegrationEventService:IListIntegrationEventService
     ) {}
 
     public func handle(request: CreateItemCommand): ServiceResult {
-        let typeId = match (setQueryService.get(request.setId).result) {
+        let typeId = match (listQueryService.get(request.listId).result) {
             case Some(v) => v.typeId
             case None => throw Exception("this should not happen")
         }
-        var contribUrl = "${contribUrlService.getContribUrl(typeId)}/item/create"
+        //获得url
+        var contribUrl = "${contribUrlService.getContribUrl(typeId)}/add"
         let contribJson = request.contribJson.toJson().toJsonString()
 
-        let httpClient = ClientBuilder().build()
+        /* let httpClient = ClientBuilder().build()
         let httpRequest = HttpRequestBuilder().method("POST").url(contribUrl).body(contribJson).build()
         let httpResponse = httpClient.send(httpRequest)
         let responseStream = httpResponse.body
@@ -46,6 +48,8 @@ public class CreateItemCommandHandler <: IRequestHandler<CreateItemCommand, Serv
         let json = responseStreamReader.readToEnd()
         let jsonValue = JsonValue.fromStr(json)
         let dataModel = DataModel.fromJson(jsonValue)
+        let result = TypedServiceResultViewModel<String>.deserialize(dataModel) */
+        let dataModel = RequestUtil.getRequest(contribUrl, contribJson)
         let result = TypedServiceResultViewModel<String>.deserialize(dataModel)
 
         if (result.status != Success) {
@@ -57,15 +61,17 @@ public class CreateItemCommandHandler <: IRequestHandler<CreateItemCommand, Serv
             case None => throw Exception("this should not happen")
         }
 
-        let item = RecAllItem(typeId, request.setId, contribId, identityService.getUserIdentityGuid())
+        let item = TodoItem(typeId, request.listId, contribId, identityService.getUserIdentityGuid())
         itemRepository.add(item)
         if (!itemRepository.unitOfWork.saveEntities()) {
             ServiceResult.failure()
+        } else {
+            ServiceResult.success()
         }
 
         var itemIdAssignedIntegrationEvent = ItemIdAssignedIntegrationEvent(typeId, contribId, item.id)
         listIntegrationEventService.addAndSaveEvent(itemIdAssignedIntegrationEvent)
-
+        
         return if (itemRepository.unitOfWork.saveEntities()) {
             ServiceResult.success()
         } else {

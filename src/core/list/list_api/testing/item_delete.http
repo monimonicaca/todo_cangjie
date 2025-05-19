@@ -1,0 +1,9 @@
+POST http://localhost:35220/item/delete
+Content-Type: application/json
+
+{
+    "id": 101,
+    "contribJson": {
+        "id":2
+    }
+}

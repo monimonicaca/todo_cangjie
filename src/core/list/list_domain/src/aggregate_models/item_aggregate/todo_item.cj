@@ -31,12 +31,15 @@ public open class TodoItem <: Entity & IAggregateRoot {
         __isDeleted = true
     }
 
-    public func setSetId(listId: Int64): Unit {
+    public func setListId(listId: Int64): Unit {
         if (__isDeleted) {
             throwDeletedException()
         }
 
         __listId = listId
+    }
+    public func getListId(): Int64 {
+        return __listId
     }
 
     private func throwDeletedException(): Unit {

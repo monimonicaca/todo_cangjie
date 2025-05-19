@@ -49,7 +49,10 @@ func addCustomApplicationServices(serviceCollection: INaiveServiceCollection): I
     @NIAddSingleton[serviceCollection](IHiLoConnectionProvider, HiLoConnectionProvider)
     @NIAddSingleton[serviceCollection](IHiLoIdGenerator, HiLoIdGenerator)
     @NIAddSingleton[serviceCollection](IListQueryService,ListQueryService)
+    @NIAddSingleton[serviceCollection](IItemQueryService,ItemQueryService)
+    @NIAddSingleton[serviceCollection](IContribUrlService,ContribUrlService)
 
+    @NIAddScoped[serviceCollection](IItemRepository,ItemRepository)
     @NIAddScoped[serviceCollection](IListRepository, ListRepository)
     @NIAddScoped[serviceCollection](IIdentityService,MockIdentityService)
     @NIAddScoped[serviceCollection](IDatabaseContext, DatabaseContext)
@@ -63,6 +66,16 @@ func addCustomMediator(serviceCollection: INaiveServiceCollection): INaiveServic
     @NMRegisterTransientHandler[serviceCollection](CreateListCommand,CreateListCommandHandler)
     @NMRegisterTransientHandler[serviceCollection](UpdateListCommand,UpdateListCommandHandler)
     @NMRegisterTransientHandler[serviceCollection](DeleteListCommand,DeleteListCommandHandler)
+    @NMRegisterTransientHandler[serviceCollection](CreateItemCommand,CreateItemCommandHandler)
+    @NMRegisterTransientHandler[serviceCollection](UpdateItemContentCommand,UpdateItemContentCommandHandler)
+    @NMRegisterTransientHandler[serviceCollection](UpdateItemTitleCommand,UpdateItemTitleCommandHandler)
+    @NMRegisterTransientHandler[serviceCollection](DeleteItemCommand,DeleteItemCommandHandler)
+
+    @NVRegisterTransientValidator[serviceCollection](CreateItemCommand,CreateItemCommandValidator)
+    @NVRegisterTransientValidator[serviceCollection](UpdateItemContentCommand,UpdateItemContentCommandValidator)
+    @NVRegisterTransientValidator[serviceCollection](UpdateItemTitleCommand,UpdateItemTitleCommandValidator)
+    @NVRegisterTransientValidator[serviceCollection](DeleteItemCommand,DeleteItemCommandValidator)
+
     return serviceCollection
 }
 
@@ -71,6 +84,10 @@ func mapHandlers(tea: Tea): Tea {
     tea.post("list/create", createListHandler)
     tea.post("list/update", updateListHandler)
     tea.post("list/delete", deleteListHandler)
+    tea.post("item/add", createItemHandler)
+    tea.post("item/update_content", updateItemContentHandler)
+    tea.post("item/update_title",updateItemTitleHandler)
+    tea.post("item/delete",deleteItemHandler)
     tea.get("list/list", listListHandler)
     tea.get("list/get", getListHandler)
     return tea

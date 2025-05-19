@@ -1,9 +1,10 @@
-POST http://localhost:35220/item/create
+POST http://localhost:35220/item/add
 Content-Type: application/json
 
 {
-    "setId": 1,
+    "listId": 101,
     "contribJson": {
-        "content": "string"
+        "title":"test-gate2",
+    "content":"content-gate2"
     }
 }

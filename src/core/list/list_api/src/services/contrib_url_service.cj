@@ -1,9 +1,7 @@
 package list_api.services
 
 import list_domain.aggregate_models.*
-
 import naiveioc.macros.*
-
 
 @NIService
 public class ContribUrlService <: IContribUrlService {

@@ -7,5 +7,7 @@ public interface IItemRepository <: IRepository<TodoItem> {
 
     func update(todoItem: TodoItem): Unit
 
-    func get(listId: Int64): ?TodoItem
+    func update(todoItem:TodoItem,isDelete:Bool):Unit
+
+    func get(itemId: Int64): ?TodoItem
 }

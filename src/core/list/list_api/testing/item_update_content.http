@@ -1,0 +1,11 @@
+POST http://localhost:35220/item/update_content
+Content-Type: application/json
+
+{
+    "listId": 101,
+    "id":102,
+    "contribJson": {
+        "id":2,
+    "content":"content"
+    }
+}

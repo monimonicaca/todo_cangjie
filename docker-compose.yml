@@ -80,7 +80,20 @@ services:
     ports:
       - "35191:80"
       - "35181:8001"
-      
+
+  todo-envoygateway-dapr:
+    image: "swr.cn-north-4.myhuaweicloud.com/swr-devadv/dapr:1.14.4"
+    network_mode: "service:todo-envoygateway"
+    depends_on:
+      - todo-envoygateway
+    command: [ "./daprd",
+               "-app-id", "todo-envoygateway",
+               "-app-port", "80",
+               "-components-path", "/components"
+    ]
+    volumes:
+      - "./dapr/components/:/components"
+    restart: always 
   todo-seq:
     image: "swr.cn-north-4.myhuaweicloud.com/swr-devadv/seq:latest"
     environment:
@@ -89,6 +102,18 @@ services:
       - todolist-cangjie-network
     ports:
       - "35340:80"
+
+
+  todo-rabbitmq:
+    image: "swr.cn-north-4.myhuaweicloud.com/swr-devadv/rabbitmq:3-management-alpine"
+    networks:
+      - todolist-cangjie-network
+    ports:
+      - "35672:5672"
+      - "35673:15672"
+    volumes:
+      - todoCj-rabbitmq-data:/var/lib/rabbitmq/
+      - todoCj-rabbitmq-log:/var/log/rabbitmq/
 
 networks:
   todolist-cangjie-network:

@@ -76,4 +76,27 @@ public class ItemRepository <: IItemRepository {
             return context
         }
     }
+public func delete(todoItem: TodoItem){
+    context.update {
+            connection =>
+            let (sql, params) = @NSUpdate(TodoItemEntity) {
+                p => [
+                    p.__typeId << todoItem.__typeId,
+                    p.__listId << todoItem.__listId,
+                    p.__contribId << todoItem.__contribId,
+                    p.__userIdentityGuid << todoItem.__userIdentityGuid,
+                    p.__isDeleted << true
+                ]
+            }.setWhere {p => p.__id == todoItem.__id}.toSQLWithParams()
+            return (connection.prepareStatement(sql), params)
+        }
+
+}
+    public func update(todoItem: TodoItem,isDeleted:Bool): Unit {
+        if(isDeleted){
+            delete(todoItem)
+        }else{
+            update(todoItem)
+        }
+    }
 }

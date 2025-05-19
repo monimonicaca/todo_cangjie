@@ -1,4 +1,5 @@
 [dependencies]
+  event_bus = { path = "../../../shared/event_bus" }
   list_domain = { path = "../list_domain" }
   list_infrastructure = { path = "../list_infrastructure" }
   tea = { git = "https://gitcode.com/yishengTH/tea.git", branch = "cj-0.53.13" }
