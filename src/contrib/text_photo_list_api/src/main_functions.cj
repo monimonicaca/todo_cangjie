@@ -3,7 +3,10 @@ package text_photo_list_api
 import text_photo_list_api.handlers.*
 import text_photo_list_api.services.*
 import text_photo_list_api.commands.*
+import text_photo_list_api.integration_events.*
+
 import tea.*
+import dapr_tea.subscription.*
 // naiveteaset
 //流水线
 import naiveteaset.macros.*
@@ -54,7 +57,8 @@ func addCustomMediator(serviceCollection: INaiveServiceCollection): INaiveServic
     //@NVRegisterTransientValidator[serviceCollection](UpdateTodoItemContentCommand,UpdateTodoItemCommandValidator)
 
     @NMRegisterTransientHandler[serviceCollection](FinishToDoItemCommand,FinishToDoItemCommandHandler)
-    
+        @NMRegisterTransientHandler[serviceCollection](ItemIdAssignedIntegrationEvent, ItemIdAssignedIntegrationEventHandler)
+
     @NMRegisterTransientHandler[serviceCollection](UpdateTodoItemTitleCommand,UpdateTodoItemTitleCommandHandler)
     return serviceCollection
 }
@@ -65,3 +69,15 @@ func addCustomLogger(serviceCollection: INaiveServiceCollection): INaiveServiceC
     }
     return serviceCollection
 }
+func mapTopicHandlers(tea: Tea): Tea {
+    // 订阅事件并注册事件Handler
+    tea
+        .topic
+        .pubsubName("todo-pubsub")
+        .topic("ItemIdAssignedIntegrationEvent")
+        .post("/itemIdAssigned", itemIdAssignedIntegrationEventHandler)
+    tea.subscriptions.mapHandler()
+
+    return tea
+}
+

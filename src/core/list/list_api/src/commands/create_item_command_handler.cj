@@ -21,6 +21,8 @@ import net.http.*
 import serialization.serialization.*
 import std.io.*
 
+import event_bus.abstractions.*
+
 @NIService
 public class CreateItemCommandHandler <: IRequestHandler<CreateItemCommand, ServiceResult> {
     public CreateItemCommandHandler(
@@ -65,13 +67,12 @@ private let listIntegrationEventService:IListIntegrationEventService
         itemRepository.add(item)
         if (!itemRepository.unitOfWork.saveEntities()) {
             ServiceResult.failure()
-        } else {
-            ServiceResult.success()
-        }
+        } 
 
         var itemIdAssignedIntegrationEvent = ItemIdAssignedIntegrationEvent(typeId, contribId, item.id)
         listIntegrationEventService.addAndSaveEvent(itemIdAssignedIntegrationEvent)
         
+        //  event_bus.publish(ItemIdAssignedIntegrationEvent(typeId, contribId, item.id))
         return if (itemRepository.unitOfWork.saveEntities()) {
             ServiceResult.success()
         } else {

@@ -5,11 +5,11 @@ import list_infrastructure.repositories.*
 import list_api.behaviors.*
 import list_api.commands.*
 import list_api.handlers.*
-//import list_api.integration_events.*
+import list_api.integration_events.*
 import list_api.queries.*
 import list_api.services.*
-//import event_bus.abstractions.*
-//import event_bus.*
+import event_bus.abstractions.*
+import event_bus.*
 
 // naiveioc
 import naiveioc.*
@@ -51,17 +51,23 @@ func addCustomApplicationServices(serviceCollection: INaiveServiceCollection): I
     @NIAddSingleton[serviceCollection](IListQueryService,ListQueryService)
     @NIAddSingleton[serviceCollection](IItemQueryService,ItemQueryService)
     @NIAddSingleton[serviceCollection](IContribUrlService,ContribUrlService)
+    @NIAddSingleton[serviceCollection](IEventBus,DaprEventBus)
 
     @NIAddScoped[serviceCollection](IItemRepository,ItemRepository)
     @NIAddScoped[serviceCollection](IListRepository, ListRepository)
     @NIAddScoped[serviceCollection](IIdentityService,MockIdentityService)
     @NIAddScoped[serviceCollection](IDatabaseContext, DatabaseContext)
+     @NIAddScoped[serviceCollection](IIntegrationEventLogService, IntegrationEventLogService)
+    @NIAddScoped[serviceCollection](IListIntegrationEventService, ListIntegrationEventService)
+
     return serviceCollection
 }
 
 func addCustomMediator(serviceCollection: INaiveServiceCollection): INaiveServiceCollection {
     @NIAddTransient[serviceCollection](NaiveMediator)
     @NIAddTransient[serviceCollection](IPipelineBehavior, ValidatorBehavior)
+ @NIAddTransient[serviceCollection](IPipelineBehavior, ValidatorBehavior)
+    @NIAddTransient[serviceCollection](IPipelineBehavior, TransactionBehavior)
 
     @NMRegisterTransientHandler[serviceCollection](CreateListCommand,CreateListCommandHandler)
     @NMRegisterTransientHandler[serviceCollection](UpdateListCommand,UpdateListCommandHandler)

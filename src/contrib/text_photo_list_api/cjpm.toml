@@ -1,5 +1,5 @@
 [dependencies]
- 
+  event_bus = { path = "../../shared/event_bus/" }
   tea = { git = "https://gitcode.com/yishengTH/tea.git", branch = "cj-0.53.13" }
   naiveteaset = { git = "https://gitcode.com/zhangyin_gitcode/naiveteaset.git", branch = "master" }
   naiveioc = { git = "https://gitcode.com/zhangyin_gitcode/naiveioc.git", branch = "master" }
@@ -14,7 +14,9 @@
   naiveserviceresult = { git = "https://gitcode.com/zhangyin_gitcode/naiveserviceresult.git" }
   naivelogger = { git = "https://gitcode.com/zhangyin_gitcode/naivelogger.git", branch = "master" }
   naivelogger_seq = { git = "https://gitcode.com/zhangyin_gitcode/naivelogger_seq.git", branch = "master" }
-  
+  fakeuuid4cj = { git = "https://gitcode.com/zhangyin_gitcode/fakeuuid4cj.git" }
+  derive_macros = { git = "https://gitcode.com/OpenCangjieCommunity/derive_macros.git", output-type = "static" ,commitId="f81e83a7c66de60302ae80d173a761795932d4b0"}
+
 [package]
   cjc-version = "0.53.18"
   compile-option = "--debug-macro"

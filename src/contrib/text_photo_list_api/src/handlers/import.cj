@@ -2,6 +2,8 @@ package text_photo_list_api.handlers
 
 import text_photo_list_api.services.*
 import text_photo_list_api.commands.*
+import text_photo_list_api.integration_events.*
+
 import tea.*
 //中介者模式
 import naivemediator.abstractions.*
@@ -75,4 +77,13 @@ public func finishItemHandler(context: TeaContext): Unit {
 public func checkServiceHandler(context: TeaContext): Unit {
     let storage = @NIGetRequiredService[context.serviceProvider](IToDoItemStorage)
     context.string(200, storage.toString())
+}
+public func itemIdAssignedIntegrationEventHandler(p: TeaContext) {
+    let integrationEvent = p.bindJson<ItemIdAssignedIntegrationEvent>()
+    let logger = @NIGetRequiredService[p.serviceProvider](Logger)
+    logger.info("----- Handling ${ItemIdAssignedIntegrationEvent.__naivemediator__qualifiedName}")
+    
+    let mediator = @NIGetRequiredService[p.serviceProvider](NaiveMediator)
+    let result = mediator.send(integrationEvent)
+    p.json<ServiceResultViewModel>(200, result.toViewModel())
 }

@@ -14,4 +14,6 @@ public interface IToDoItemStorage {
     func finish(id:Int64) :ServiceResult
 
 func updateTitle(id:Int64,title:String):TypedServiceResult<String>
+func updateItemId(id: Int64, itemId: Int64): ServiceResult
+
 }

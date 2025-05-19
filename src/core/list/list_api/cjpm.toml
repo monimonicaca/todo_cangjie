@@ -17,7 +17,8 @@
   cjjson = { git = "https://gitcode.com/Cangjie-TPC/cangjieJSON.git", output-type = "static" }
   fakeuuid4cj = { git = "https://gitcode.com/zhangyin_gitcode/fakeuuid4cj.git" }
   naiveserviceresult = { git = "https://gitcode.com/zhangyin_gitcode/naiveserviceresult.git" }
-  
+  derive_macros = { git = "https://gitcode.com/OpenCangjieCommunity/derive_macros.git", output-type = "static" ,commitId="f81e83a7c66de60302ae80d173a761795932d4b0"}
+
 [package]
   cjc-version = "0.53.18"
   compile-option = ""

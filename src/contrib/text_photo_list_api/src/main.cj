@@ -16,7 +16,7 @@ main(): Int64 {
         services => services |> useDaprClient |> addCustomLogger |> addCustomApplicationServices |> addCustomMediator
     }
 
-    tea |> mapHandlers
+    tea |> mapHandlers |> mapTopicHandlers
 
     tea.run(8080)
     return 0

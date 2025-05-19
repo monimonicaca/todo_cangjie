@@ -108,4 +108,17 @@ public class ToDoItemStorage <: IToDoItemStorage {
 
         throw Exception("this should not happen")
     }
+        public func updateItemId(id: Int64, itemId: Int64): ServiceResult {
+        let (sql, params) = @NSUpdate(ToDoItem) {p => [p.todoItemId << itemId]}.setWhere {p => p.id == id}.and {
+            p => p.userIdentityGuid == identityService.getUserIdentityGuid()
+        }.and {p => p.isDeleted == false}.toSQLWithParams()
+
+        try (connection = connectionProvider.getConnection()) {
+            let statement = connection.prepareStatement(sql)
+            statement.update(params)
+            return ServiceResult.success()
+        }
+
+        throw Exception("this should not happen")
+    }
 }
