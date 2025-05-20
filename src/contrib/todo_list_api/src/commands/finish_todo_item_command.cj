@@ -13,7 +13,6 @@ import naiveserviceresult.*
 
 @NMIRequest[@ sourcePackage(), ServiceResult]
 @JsonAdapter
-public class FinishToDoItemCommand  {
+public class FinishToDoItemCommand {
     public var id: Int64 = 0
-    
 }

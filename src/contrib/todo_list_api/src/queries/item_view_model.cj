@@ -1,27 +1,22 @@
-package todo_list_api.models
+package todo_list_api.queries
 
 import std.time.*
 // naivesqlbuilder
 import naivesqlbuilder.abstractions.*
 import naivesqlbuilder.macros.*
 import std.collection.*
+import cjjson.*
+import cjjson.macros.*
 
 @NSTable["todoItem"]
-public class ToDoItem {
-    @NSColumn
+@JsonAdapter
+public class ItemViewModel {
+     @NSColumn
     public var id: Int64 = 0
-    @NSColumn
-    public var todoItemId: ?Int64 = None
     @NSColumn
     public var title: String = ""
     @NSColumn
     public var content: String = ""
-    @NSColumn
-    public var userIdentityGuid: String = ""
-    @NSColumn
-    public var isCompleted: Bool = false;
-    @NSColumn
-    public var isDeleted: Bool = false;
     @NSColumn
     public var completedTime: String = ""
     @NSColumn

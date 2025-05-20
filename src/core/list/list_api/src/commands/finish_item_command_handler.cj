@@ -33,13 +33,7 @@ private let itemRepositoryService:IItemRepository
     ) {}
 
     public func handle(request: FinishItemCommand): ServiceResult {
-        //先将此服务中的item删掉
-        let item=match (itemRepositoryService.get(request.id)){
-            case Some(v)=>v
-            case None=>return ServiceResult.invalidParameter("Item not found")
-        }
-        item.setDeleted()
-        itemRepositoryService.update(item)
+       
         let listId = match (itemQueryService.get(request.id).result) {
             case Some(v) => v.listId
             case None => throw Exception("illegal mistake")

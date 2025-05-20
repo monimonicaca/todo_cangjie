@@ -3,7 +3,7 @@ package todo_list_api.handlers
 import todo_list_api.services.*
 import todo_list_api.commands.*
 import todo_list_api.integration_events.*
-
+import todo_list_api.queries.*
 import tea.*
 //中介者模式
 import naivemediator.abstractions.*
@@ -16,7 +16,7 @@ import naiveioc.macros.*
 import naiveteaset.*
 //通用的返回值
 import naiveserviceresult.*
-
+import std.convert.*
 //引用标准日志空间
 import log.*
 
@@ -44,6 +44,7 @@ public func deleteItemHandler(context: TeaContext): Unit {
     let result = mediator.send(command)
     context.json(200, result.toViewModel())
 }
+
 public func updateItemContentHandler(context: TeaContext): Unit {
     let command = context.bindJson<UpdateTodoItemContentCommand>()
     let logger = @NIGetRequiredService[context.serviceProvider](Logger)
@@ -54,6 +55,7 @@ public func updateItemContentHandler(context: TeaContext): Unit {
     let result = mediator.send(command)
     context.json(200, result.toViewModel())
 }
+
 public func updateItemTitleHandler(context: TeaContext): Unit {
     let command = context.bindJson<UpdateTodoItemTitleCommand>()
     let logger = @NIGetRequiredService[context.serviceProvider](Logger)
@@ -64,6 +66,7 @@ public func updateItemTitleHandler(context: TeaContext): Unit {
     let result = mediator.send(command)
     context.json(200, result.toTypedViewModel())
 }
+
 public func finishItemHandler(context: TeaContext): Unit {
     let command = context.bindJson<FinishToDoItemCommand>()
     let logger = @NIGetRequiredService[context.serviceProvider](Logger)
@@ -74,16 +77,36 @@ public func finishItemHandler(context: TeaContext): Unit {
     let result = mediator.send(command)
     context.json(200, result.toViewModel())
 }
+
 public func checkServiceHandler(context: TeaContext): Unit {
     let storage = @NIGetRequiredService[context.serviceProvider](IToDoItemStorage)
     context.string(200, storage.toString())
 }
+
 public func itemIdAssignedIntegrationEventHandler(p: TeaContext) {
     let integrationEvent = p.bindJson<ItemIdAssignedIntegrationEvent>()
     let logger = @NIGetRequiredService[p.serviceProvider](Logger)
     logger.info("----- Handling ${ItemIdAssignedIntegrationEvent.__naivemediator__qualifiedName}")
-    
+
     let mediator = @NIGetRequiredService[p.serviceProvider](NaiveMediator)
     let result = mediator.send(integrationEvent)
     p.json<ServiceResultViewModel>(200, result.toViewModel())
+}
+public func listItemHandler(p: TeaContext): Unit {
+    let skip = Int64.tryParse(p.query("skip") ?? throw Exception("missing query parameter skip")) ?? throw Exception(
+        "missing query parameter skip")
+    let take = Int64.tryParse(p.query("take") ?? throw Exception("missing query parameter take")) ?? throw Exception(
+        "missing query parameter take")
+
+    let queryService = @NIGetRequiredService[p.serviceProvider](IItemQueryService)
+    let lists = queryService.list(skip, take).toTypedViewModel()
+    p.json(200, lists)
+}
+
+public func getItemHandler(p: TeaContext): Unit {
+    let id = Int64.tryParse(p.query("id") ?? throw Exception("missing query parameter id")) ?? throw Exception(
+        "missing query parameter id")
+    let queryService = @NIGetRequiredService[p.serviceProvider](IItemQueryService)
+    let result = queryService.get(id)
+    p.json(200, result.toTypedViewModel())
 }

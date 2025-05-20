@@ -44,13 +44,16 @@ public class ToDoItemStorage <: IToDoItemStorage {
         throw Exception("this should not happen")
     }
     public func finish(id: Int64): ServiceResult {
-        let (sql, params) = @NSUpdate(ToDoItem) {p => [p.isCompleted << true,p.completedTime<<DateTime.now()]}
+         let pattern = "yyyy/MM/dd HH:mm:ssSSS OO"
+    let datetime = DateTime.now()
+    let str = datetime.toString(pattern)
+        let (sql, params) = @NSUpdate(ToDoItem) {p => [p.isCompleted << true, p.completedTime << str]}
             .setWhere {p => p.id == id}
             .and {
                 p => p.userIdentityGuid == identityService.getUserIdentityGuid()
             }
             .and {p => p.isDeleted == false}
-            .and{p => p.isCompleted == false}
+            .and {p => p.isCompleted == false}
             .toSQLWithParams()
 
         try (connection = connectionProvider.getConnection()) {
@@ -63,8 +66,13 @@ public class ToDoItemStorage <: IToDoItemStorage {
     }
 
     public func add(title: String, content: String): TypedServiceResult<String> {
+            let pattern = "yyyy/MM/dd HH:mm:ssSSS OO"
+    let datetime = DateTime.now()
+    let str = datetime.toString(pattern)
+   
         let (sql, params) = @NSInsertInto(ToDoItem) {
-            p => [p.title << title, p.content << content, p.userIdentityGuid << identityService.getUserIdentityGuid(),p.createdTime << DateTime.now()]
+            p => [p.title << title, p.content << content, p.userIdentityGuid << identityService.getUserIdentityGuid(),
+                p.createdTime << str]
         }.toSQLWithParams()
         print(sql)
 
@@ -92,7 +100,7 @@ public class ToDoItemStorage <: IToDoItemStorage {
 
         throw Exception("this should not happen")
     }
-     public func updateTitle(id: Int64, title: String): TypedServiceResult<String> {
+    public func updateTitle(id: Int64, title: String): TypedServiceResult<String> {
         let (sql, params) = @NSUpdate(ToDoItem) {p => [p.title << title]}
             .setWhere {p => p.id == id}
             .and {
@@ -109,10 +117,14 @@ public class ToDoItemStorage <: IToDoItemStorage {
 
         throw Exception("this should not happen")
     }
-        public func updateItemId(id: Int64, itemId: Int64): ServiceResult {
-        let (sql, params) = @NSUpdate(ToDoItem) {p => [p.todoItemId << itemId]}.setWhere {p => p.id == id}.and {
-            p => p.userIdentityGuid == identityService.getUserIdentityGuid()
-        }.and {p => p.isDeleted == false}.toSQLWithParams()
+    public func updateItemId(id: Int64, itemId: Int64): ServiceResult {
+        let (sql, params) = @NSUpdate(ToDoItem) {p => [p.todoItemId << itemId]}
+            .setWhere {p => p.id == id}
+            .and {
+                p => p.userIdentityGuid == identityService.getUserIdentityGuid()
+            }
+            .and {p => p.isDeleted == false}
+            .toSQLWithParams()
 
         try (connection = connectionProvider.getConnection()) {
             let statement = connection.prepareStatement(sql)

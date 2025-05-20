@@ -3,8 +3,8 @@ package todo_list_api
 import todo_list_api.handlers.*
 import todo_list_api.services.*
 import todo_list_api.commands.*
+import todo_list_api.queries.*
 import todo_list_api.integration_events.*
-
 import tea.*
 import dapr_tea.subscription.*
 // naiveteaset
@@ -28,9 +28,11 @@ import naivelogger_seq.*
 func mapHandlers(tea: Tea): Tea {
     tea.post("add", addHandler)
     tea.post("delete", deleteItemHandler)
-    tea.post("update/content",updateItemContentHandler)
-    tea.post("update/title",updateItemTitleHandler)
-    tea.post("finish",finishItemHandler)
+    tea.post("update/content", updateItemContentHandler)
+    tea.post("update/title", updateItemTitleHandler)
+    tea.post("finish", finishItemHandler)
+    tea.get("list",listItemHandler)
+    tea.get("get",getItemHandler)
     return tea
 }
 
@@ -38,7 +40,9 @@ func addCustomApplicationServices(serviceCollection: INaiveServiceCollection): I
     //Scoped请求内存活
     @NIAddScoped[serviceCollection](IToDoItemStorage,ToDoItemStorage)
     @NIAddScoped[serviceCollection](IIdentityService,MockIdentityService)
+    
     //全局一个实例
+   @NIAddSingleton[serviceCollection](IItemQueryService,ItemQueryService)
     @NIAddSingleton[serviceCollection](IDatabaseConnectionProvider,DatabaseConnectionProvider)
     return serviceCollection
 }
@@ -51,13 +55,13 @@ func addCustomMediator(serviceCollection: INaiveServiceCollection): INaiveServic
     @NMRegisterTransientHandler[serviceCollection](CreateToDoItemCommand,CreateToDoItemCommandHandler)
 
     @NMRegisterTransientHandler[serviceCollection](DeleteTodoItemCommand,DeleteToDoItemCommandHandler)
-  // @NVRegisterTransientValidator[serviceCollection](DeleteTodoItemCommand,DeleteToDoCommandValidator)
+    // @NVRegisterTransientValidator[serviceCollection](DeleteTodoItemCommand,DeleteToDoCommandValidator)
 
     @NMRegisterTransientHandler[serviceCollection](UpdateTodoItemContentCommand,UpdateTodoItemContentCommandHandler)
     //@NVRegisterTransientValidator[serviceCollection](UpdateTodoItemContentCommand,UpdateTodoItemCommandValidator)
 
     @NMRegisterTransientHandler[serviceCollection](FinishToDoItemCommand,FinishToDoItemCommandHandler)
-        @NMRegisterTransientHandler[serviceCollection](ItemIdAssignedIntegrationEvent, ItemIdAssignedIntegrationEventHandler)
+    @NMRegisterTransientHandler[serviceCollection](ItemIdAssignedIntegrationEvent, ItemIdAssignedIntegrationEventHandler)
 
     @NMRegisterTransientHandler[serviceCollection](UpdateTodoItemTitleCommand,UpdateTodoItemTitleCommandHandler)
     return serviceCollection
@@ -69,6 +73,7 @@ func addCustomLogger(serviceCollection: INaiveServiceCollection): INaiveServiceC
     }
     return serviceCollection
 }
+
 func mapTopicHandlers(tea: Tea): Tea {
     // 订阅事件并注册事件Handler
     tea
@@ -80,4 +85,3 @@ func mapTopicHandlers(tea: Tea): Tea {
 
     return tea
 }
-
