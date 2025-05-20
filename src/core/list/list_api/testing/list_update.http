@@ -2,6 +2,6 @@ POST http://localhost:35220/list/update
 Content-Type: application/json
 
 {
-    "id": 101,
+    "id": 1,
     "name": "updated"
 }

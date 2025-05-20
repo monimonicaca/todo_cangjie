@@ -51,7 +51,7 @@ func addCustomMediator(serviceCollection: INaiveServiceCollection): INaiveServic
     @NMRegisterTransientHandler[serviceCollection](CreateToDoItemCommand,CreateToDoItemCommandHandler)
 
     @NMRegisterTransientHandler[serviceCollection](DeleteTodoItemCommand,DeleteToDoItemCommandHandler)
-   // @NVRegisterTransientValidator[serviceCollection](DeleteTodoItemCommand,DeleteToDoCommandValidator)
+  // @NVRegisterTransientValidator[serviceCollection](DeleteTodoItemCommand,DeleteToDoCommandValidator)
 
     @NMRegisterTransientHandler[serviceCollection](UpdateTodoItemContentCommand,UpdateTodoItemContentCommandHandler)
     //@NVRegisterTransientValidator[serviceCollection](UpdateTodoItemContentCommand,UpdateTodoItemCommandValidator)

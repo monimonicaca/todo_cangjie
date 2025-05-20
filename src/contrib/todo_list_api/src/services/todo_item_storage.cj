@@ -1,7 +1,8 @@
 package todo_list_api.services
 
 import todo_list_api.models.*
-
+import std.collection.*
+import std.time.*
 // naivesqlbuilder
 import naivesqlbuilder.builder.*
 import naivesqlbuilder.macros.*
@@ -43,7 +44,7 @@ public class ToDoItemStorage <: IToDoItemStorage {
         throw Exception("this should not happen")
     }
     public func finish(id: Int64): ServiceResult {
-        let (sql, params) = @NSUpdate(ToDoItem) {p => [p.isCompleted << true]}
+        let (sql, params) = @NSUpdate(ToDoItem) {p => [p.isCompleted << true,p.completedTime<<DateTime.now()]}
             .setWhere {p => p.id == id}
             .and {
                 p => p.userIdentityGuid == identityService.getUserIdentityGuid()
@@ -63,7 +64,7 @@ public class ToDoItemStorage <: IToDoItemStorage {
 
     public func add(title: String, content: String): TypedServiceResult<String> {
         let (sql, params) = @NSInsertInto(ToDoItem) {
-            p => [p.title << title, p.content << content, p.userIdentityGuid << identityService.getUserIdentityGuid()]
+            p => [p.title << title, p.content << content, p.userIdentityGuid << identityService.getUserIdentityGuid(),p.createdTime << DateTime.now()]
         }.toSQLWithParams()
         print(sql)
 

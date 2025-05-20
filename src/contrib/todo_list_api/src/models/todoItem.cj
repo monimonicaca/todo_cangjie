@@ -1,5 +1,5 @@
 package todo_list_api.models
-
+import std.time.*
 // naivesqlbuilder
 import naivesqlbuilder.abstractions.*
 import naivesqlbuilder.macros.*
@@ -23,4 +23,9 @@ public class ToDoItem {
     public var isDeleted: Bool = false;
     @NSColumn
     public var image_url: String = "";
+    @NSColumn 
+public var completedTime:DateTime= DateTime.fromUnixTimeStamp(Duration.Zero)
+@NSColumn
+public var createdTime:DateTime= DateTime.fromUnixTimeStamp(Duration.Zero)
+
 }

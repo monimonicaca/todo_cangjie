@@ -76,11 +76,13 @@ func addCustomMediator(serviceCollection: INaiveServiceCollection): INaiveServic
     @NMRegisterTransientHandler[serviceCollection](UpdateItemContentCommand,UpdateItemContentCommandHandler)
     @NMRegisterTransientHandler[serviceCollection](UpdateItemTitleCommand,UpdateItemTitleCommandHandler)
     @NMRegisterTransientHandler[serviceCollection](DeleteItemCommand,DeleteItemCommandHandler)
+ @NMRegisterTransientHandler[serviceCollection](FinishItemCommand,FinishItemCommandHandler)
 
     @NVRegisterTransientValidator[serviceCollection](CreateItemCommand,CreateItemCommandValidator)
     @NVRegisterTransientValidator[serviceCollection](UpdateItemContentCommand,UpdateItemContentCommandValidator)
     @NVRegisterTransientValidator[serviceCollection](UpdateItemTitleCommand,UpdateItemTitleCommandValidator)
     @NVRegisterTransientValidator[serviceCollection](DeleteItemCommand,DeleteItemCommandValidator)
+@NVRegisterTransientValidator[serviceCollection](FinishItemCommand,FinishItemCommandValidator)
 
     return serviceCollection
 }
@@ -94,6 +96,7 @@ func mapHandlers(tea: Tea): Tea {
     tea.post("item/update_content", updateItemContentHandler)
     tea.post("item/update_title",updateItemTitleHandler)
     tea.post("item/delete",deleteItemHandler)
+    tea.post("item/finish",finishItemHandler)
     tea.get("list/list", listListHandler)
     tea.get("list/get", getListHandler)
     return tea

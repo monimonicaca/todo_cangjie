@@ -2,7 +2,7 @@ POST http://localhost:35220/item/add
 Content-Type: application/json
 
 {
-    "listId": 101,
+    "listId": 1,
     "contribJson": {
         "title":"test-gate2-event-bus",
     "content":"content-gate2"

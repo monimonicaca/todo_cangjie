@@ -2,6 +2,7 @@ package todo_list_api.commands
 
 import serialization.serialization.*
 
+
 //json和这个类互相映射
 import cjjson.*
 import cjjson.macros.*
@@ -12,24 +13,24 @@ import naivemediator.macros.*
 import naiveserviceresult.*
 
 @NMIRequest[@ sourcePackage(), ServiceResult]
+
 @JsonAdapter
-public class DeleteTodoItemCommand  <: Hashable & Equatable<DeleteTodoItemCommand>{
+public class DeleteTodoItemCommand  <: Hashable & Equatable<DeleteTodoItemCommand> {
     public var id: Int64 = 0
-    public func hashCode(): Int64 {
-        return id;
+public func hashCode(): Int64 {
+        var hasher = DefaultHasher()
+        hasher.write("DeleteTodoItemCommand")
+        hasher.write(id.hashCode())
+
+        hasher.finish()
     }
-    public operator func !=(rhs: DeleteTodoItemCommand): Bool {
-        if (rhs.id != hashCode()) {
-            return true;
-        } else {
-            return false;
-        }
+
+    public operator func ==(that: DeleteTodoItemCommand): Bool {
+        this.hashCode() == that.hashCode()
     }
-    public operator func ==(rhs: DeleteTodoItemCommand): Bool {
-        if (rhs.id != hashCode()) {
-            return false;
-        } else {
-            return true;
-        }
+
+    public operator func !=(that: DeleteTodoItemCommand): Bool {
+        this.hashCode() != that.hashCode()
     }
+   
 }

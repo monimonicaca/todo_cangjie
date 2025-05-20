@@ -67,3 +67,9 @@ public func deleteItemHandler(p: TeaContext): Unit {
     let result = mediator.send(command)
     p.json<ServiceResultViewModel>(200, result.toViewModel())
 }
+public func finishItemHandler(p: TeaContext): Unit {
+    let command = p.bindJson<FinishItemCommand>()
+    let mediator = @NIGetRequiredService[p.serviceProvider](NaiveMediator)
+    let result = mediator.send(command)
+    p.json<ServiceResultViewModel>(200, result.toViewModel())
+}

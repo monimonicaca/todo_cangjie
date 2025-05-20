@@ -2,9 +2,9 @@ POST http://localhost:35220/item/update_title
 Content-Type: application/json
 
 {
-    "id":102,
+    "id":1,
     "contribJson": {
-        "id":2,
+        "id":7,
     "title":"title_gate"
     }
 }

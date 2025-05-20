@@ -37,7 +37,7 @@ static_resources:
                             prefix: "/text-photo/"
                           route:
                             auto_host_rewrite: true
-                            prefix_rewrite: "/v1.0/invoke/todo-textphotolistapi/method/"
+                            prefix_rewrite: "/v1.0/invoke/todo-todolistapi/method/"
                             cluster: dapr
                 http_filters:
                   - name: envoy.cors

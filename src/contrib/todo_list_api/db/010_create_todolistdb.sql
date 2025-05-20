@@ -8,9 +8,10 @@ CREATE TABLE  todoItem (
     title TEXT  NULL,     
     content TEXT NOT NULL,                  
     userIdentityGuid VARCHAR(255) NOT NULL,
+    completedTime TIMESTAMP,
+    createdTime TIMESTAMP,
     isCompleted TINYINT(1) NOT NULL DEFAULT 0,
     isDeleted TINYINT(1) NOT NULL DEFAULT 0,
-    image_url VARCHAR(1024),
     INDEX idx_itemId (todoItemId),
     INDEX idx_userIdentityGuid (userIdentityGuid),
     INDEX idx_isDeleted (isDeleted)

@@ -2,5 +2,5 @@ POST http://localhost:35220/list/delete
 Content-Type: application/json
 
 {
-    "id": 202
+    "id": 2
 }

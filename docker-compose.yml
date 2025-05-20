@@ -16,8 +16,8 @@ services:
       - "35206:3306"
 
 
-  todo-textphotolistapi:
-    image: todo-textphotolistapi
+  todo-todolistapi:
+    image: todo-todolistapi
     build:
       context: .
       dockerfile: src/contrib/todo_list_api/Dockerfile
@@ -28,13 +28,13 @@ services:
       - "50001"
 
 
-  todo-textphotolistapi-dapr:
+  todo-todolistapi-dapr:
     image: "swr.cn-north-4.myhuaweicloud.com/swr-devadv/dapr:1.14.4"
-    network_mode: "service:todo-textphotolistapi"
+    network_mode: "service:todo-todolistapi"
     depends_on:
-      - todo-textphotolistapi
+      - todo-todolistapi
     command: [ "./daprd",
-               "-app-id", "todo-textphotolistapi",
+               "-app-id", "todo-todolistapi",
                "-app-port", "8080",
                "-components-path", "/components",
                "-config", "/configuration/todo-configuration.yaml" ]
